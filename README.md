@@ -49,9 +49,12 @@ A modern, sophisticated Next.js frontend for the Voice Real Estate Agent demo ap
 frontend/
 ├── src/
 │   └── app/
-│       ├── page.tsx          # Main voice agent interface
-│       ├── layout.tsx        # Root layout component
-│       └── globals.css       # Global styles and custom CSS
+│   |   ├── page.tsx          # Main voice agent interface
+│   |   ├── layout.tsx        # Root layout component
+│   |   └── globals.css       # Global styles and custom CSS
+|   └──components/
+            ├── RealEstate.tsx # Search Result
+            └── VoiceAgent.tsx # Voice agent connect interface
 ├── public/                   # Static assets
 └── package.json             # Dependencies and scripts
 ```
