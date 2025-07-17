@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Voice Real Estate Agent - Frontend
+
+A modern, sophisticated Next.js frontend for the Voice Real Estate Agent demo application.
+
+## Features
+
+- **Modern UI Design**: Clean, sophisticated interface with gradient backgrounds and glass-morphism effects
+- **Responsive Design**: Optimized for desktop and mobile devices
+- **Dark Mode Support**: Automatic dark/light mode switching
+- **Interactive Voice Controls**: Start/stop voice call functionality
+- **Real-time Status Indicators**: Visual feedback for connection and listening states
+
+## Tech Stack
+
+- **Next.js 15**: React framework with App Router
+- **TypeScript**: Type-safe development
+- **Tailwind CSS**: Utility-first CSS framework
+- **React Hooks**: State management with useState
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Node.js 18+ 
+- npm or yarn
+
+### Installation
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+3. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Project Structure
+
+```
+frontend/
+├── src/
+│   └── app/
+│       ├── page.tsx          # Main voice agent interface
+│       ├── layout.tsx        # Root layout component
+│       └── globals.css       # Global styles and custom CSS
+├── public/                   # Static assets
+└── package.json             # Dependencies and scripts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## UI Components
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Main Interface
+- **Header**: "Voice Real Estate Agent - Demo" with gradient text
+- **Connection Card**: Glass-morphism card with call controls
+- **Status Indicators**: Visual feedback for connection state
+- **Feature Cards**: Three feature highlights (Location Search, Price Range, Smart Matching)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Interactive Elements
+- **Start Call Button**: Initiates voice connection
+- **End Call Button**: Terminates voice connection
+- **Status Indicators**: Real-time connection and listening states
 
-## Learn More
+## Styling
 
-To learn more about Next.js, take a look at the following resources:
+The application uses a sophisticated design system with:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Gradient Backgrounds**: Subtle blue-to-indigo gradients
+- **Glass-morphism Effects**: Translucent cards with backdrop blur
+- **Smooth Animations**: Hover effects and transitions
+- **Custom Grid Pattern**: Subtle background texture
+- **Responsive Typography**: Scalable text sizes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Development
 
-## Deploy on Vercel
+### Available Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run start` - Start production server
+- `npm run lint` - Run ESLint
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### Customization
+
+The UI can be easily customized by modifying:
+- `src/app/page.tsx` - Main component and layout
+- `src/app/globals.css` - Global styles and custom CSS
+- Tailwind classes in components for styling
+
+## Integration
+
+This frontend is designed to integrate with the LiveKit backend voice agent. The call controls are prepared for WebRTC integration with the backend voice processing system.
+
+## Browser Support
+
+- Chrome/Edge (recommended for WebRTC)
+- Firefox
+- Safari
+- Mobile browsers
+
+## License
+
+This project is part of the Voice Real Estate Agent demo application.
