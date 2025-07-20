@@ -3,7 +3,8 @@
 import {
   RoomAudioRenderer,
   RoomContext,
-  useDataChannel
+  useDataChannel,
+  useRoomContext
 } from '@livekit/components-react';
 import { Room, LocalTrackPublication, createLocalTracks } from 'livekit-client';
 import '@livekit/components-styles';
@@ -15,6 +16,7 @@ export default function VoiceAgent() {
   const userName = 'user-' + Math.floor(Math.random() * 10000);
   const [joined, setJoined] = useState(false);
   const [connecting, setConnecting] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState("en");
 
   
   // 'room' instance should be constant for the component's lifetime
@@ -34,7 +36,7 @@ export default function VoiceAgent() {
       const data = await resp.json();
 
       if (data.token) {
-        await roomRef.current.connect('wss://voice-agent-demo-cfg9emy4.livekit.cloud', data.token);
+        await roomRef.current.connect('wss://japan-voice-1zixfsjd.livekit.cloud', data.token);
         // Publish microphone audio after successful connection
         const tracks = await createLocalTracks({
           audio: true,
@@ -55,10 +57,20 @@ export default function VoiceAgent() {
     setJoined(false);
   };
 
-  
+  const handleLanguageSwitch = async () => {
+    const newLanguage = currentLanguage === "en" ? "ja" : "en";
+    setCurrentLanguage(newLanguage);
+    await roomRef.current.localParticipant.setAttributes({ language: newLanguage });
+  };
 
   return (
-    <RoomContext.Provider value={roomRef.current}>      
+    <RoomContext.Provider value={roomRef.current}>
+      <button 
+        onClick={handleLanguageSwitch}
+        className="px-4 py-2 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-medium rounded-lg shadow-md hover:shadow-lg transform hover:scale-105 transition-all duration-200 flex items-center space-x-2 text-sm"
+      >
+        <span>{currentLanguage === "en" ? "English" : "日本語"}</span>
+      </button>
       <div className="flex flex-col items-center space-y-6">
               {!joined ? (
                 <button
