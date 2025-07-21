@@ -10,6 +10,7 @@ import { Room, LocalTrackPublication, createLocalTracks } from 'livekit-client';
 import '@livekit/components-styles';
 import { useEffect, useRef, useState } from 'react';
 import RealEstate from './RealEstate';
+import { env } from 'process';
 
 export default function VoiceAgent() {
   const roomName = 'my-room' + Math.floor(Math.random() * 100);
@@ -36,7 +37,8 @@ export default function VoiceAgent() {
       const data = await resp.json();
 
       if (data.token) {
-        await roomRef.current.connect('wss://japan-voice-1zixfsjd.livekit.cloud', data.token);
+        console.log("this is livekit url", process.env.NEXT_PUBLIC_LIVEKIT_URL);
+        await roomRef.current.connect(process.env.NEXT_PUBLIC_LIVEKIT_URL!, data.token);
         // Publish microphone audio after successful connection
         const tracks = await createLocalTracks({
           audio: true,
