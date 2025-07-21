@@ -37,8 +37,7 @@ export default function VoiceAgent() {
       const data = await resp.json();
 
       if (data.token) {
-        console.log("this is livekit url", process.env.NEXT_PUBLIC_LIVEKIT_URL);
-        await roomRef.current.connect(process.env.NEXT_PUBLIC_LIVEKIT_URL!, data.token);
+        await roomRef.current.connect("wss://voice-agent-demo-cfg9emy4.livekit.cloud", data.token);
         // Publish microphone audio after successful connection
         const tracks = await createLocalTracks({
           audio: true,
