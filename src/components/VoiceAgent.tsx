@@ -6,11 +6,45 @@ import {
   useDataChannel,
   useRoomContext
 } from '@livekit/components-react';
-import { Room, LocalTrackPublication, createLocalTracks } from 'livekit-client';
+import { Room, LocalTrackPublication, createLocalTracks, RpcError, RpcInvocationData } from 'livekit-client';
 import '@livekit/components-styles';
 import { useEffect, useRef, useState } from 'react';
-import RealEstate from './RealEstate';
 import { env } from 'process';
+import PropertyCard from './PropertyCard';
+
+interface Property {
+  title: string;
+  imgs: Array<string>;
+  videos: string;
+  floor_plan: Array<string>;
+  virtual_tutor: Array<string>;
+  property_id: string;
+  price: string;
+  property_type: string;
+  marketed_by: string;
+  status: string;
+  county: string;
+  total_sqft: string;
+  lot_size_unit: string;
+  lot_size: string;
+  full_bathrooms: string;
+  bedrooms: string;
+  right: string;
+  address: string;
+  access: Array<string>;
+  structure: string;
+  lot_category: string;
+  area_designation: string;
+  area_of_use: string;
+  building_ratio_and_floor_area_ratio: string;
+  fire_protection_designation: string;
+  other_restrictions: string;
+  living_area: string;
+  year_built: string;
+  current_status: string;
+  delivery_date: string;
+  mode_of_transaction: string;
+}
 
 export default function VoiceAgent() {
   const roomName = 'my-room' + Math.floor(Math.random() * 100);
@@ -18,6 +52,7 @@ export default function VoiceAgent() {
   const [joined, setJoined] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState("en");
+  const [result, setResult] = useState<Property[]>([]);
 
   
   // 'room' instance should be constant for the component's lifetime
@@ -35,9 +70,9 @@ export default function VoiceAgent() {
     try {
       const resp = await fetch(`/api/token?room=${roomName}&username=${userName}`);
       const data = await resp.json();
-
+      console.log(userName);
       if (data.token) {
-        await roomRef.current.connect("wss://voice-agent-demo-cfg9emy4.livekit.cloud", data.token);
+        await roomRef.current.connect('wss://japan-voice-1zixfsjd.livekit.cloud', data.token);
         // Publish microphone audio after successful connection
         const tracks = await createLocalTracks({
           audio: true,
@@ -63,6 +98,42 @@ export default function VoiceAgent() {
     setCurrentLanguage(newLanguage);
     await roomRef.current.localParticipant.setAttributes({ language: newLanguage });
   };
+
+  useEffect(() => {  
+    if (!joined || !roomRef.current) return;  
+    
+    const handleInitData = async (rpcInvocation: RpcInvocationData): Promise<string> => {  
+      try {  
+        console.log("Received initData RPC:", rpcInvocation);  
+          
+        // Parse the payload (it comes as a JSON string from Python)  
+        const payload = JSON.parse(rpcInvocation.payload);  
+          
+        if (payload) {  
+          // Handle the initial data here  
+          console.log("Initial data received:", payload);
+          setResult(payload); 
+          // You can set state or perform other actions with the data  
+          return "Success: Initial data received";  
+        } else {  
+          return "Error: Invalid data format";  
+        }  
+      } catch (error) {  
+        console.error("Error processing initial data:", error);  
+        return "Error: " + (error instanceof Error ? error.message : String(error));  
+      }
+    };
+    
+    // Register RPC method  
+    roomRef.current.localParticipant.registerRpcMethod("initData", handleInitData);  
+    
+    return () => {  
+      if (roomRef.current && roomRef.current.localParticipant) {  
+        roomRef.current.localParticipant.unregisterRpcMethod("initData");  
+      }  
+    };  
+  }, [joined]);
+
 
   return (
     <RoomContext.Provider value={roomRef.current}>
@@ -118,7 +189,11 @@ export default function VoiceAgent() {
         {/* RoomAudioRenderer allows you to hear the agent's TTS */}
         {joined && <RoomAudioRenderer />}
       </div>
-      <RealEstate />
+      <div>
+        {result.map((item, index) => (
+          <PropertyCard key={index} {...item} />
+        ))}
+      </div>
     </RoomContext.Provider>
   );
 }
