@@ -84,7 +84,7 @@ export default function Home() {
       const data = await resp.json();
       
       if (data.token) {
-        await roomRef.current.connect('wss://japan-voice-1zixfsjd.livekit.cloud', data.token);
+        await roomRef.current.connect('wss://voice-agent-demo-cfg9emy4.livekit.cloud', data.token);
         
         // Publish microphone audio after successful connection
         const tracks = await createLocalTracks({
