@@ -84,7 +84,12 @@ export default function Home() {
       const data = await resp.json();
       
       if (data.token) {
-        await roomRef.current.connect('wss://voice-agent-demo-cfg9emy4.livekit.cloud', data.token);
+        await roomRef.current.connect('wss://japan-voice-1zixfsjd.livekit.cloud', data.token);
+        
+        // Set the language attribute immediately after connection
+        console.log('Setting language attribute to:', currentLanguage);
+        await roomRef.current.localParticipant.setAttributes({ language: currentLanguage });
+        console.log('Language attribute set successfully');
         
         // Publish microphone audio after successful connection
         const tracks = await createLocalTracks({
@@ -119,10 +124,14 @@ export default function Home() {
     setSelectedProperty(null);
   };
 
-  const handleLanguageSwitch = async () => {
-    const newLanguage = currentLanguage === "en" ? "ja" : "en";
+  const handleLanguageChange = async (newLanguage: string) => {
+    console.log('Language changed to:', newLanguage);
     setCurrentLanguage(newLanguage);
-    await roomRef.current.localParticipant.setAttributes({ language: newLanguage });
+    if (roomRef.current && roomRef.current.localParticipant) {
+      console.log('Setting participant language attribute to:', newLanguage);
+      await roomRef.current.localParticipant.setAttributes({ language: newLanguage });
+      console.log('Participant language attribute set successfully');
+    }
   };
 
   const handleContactSubmit = async () => {
@@ -269,23 +278,28 @@ export default function Home() {
           {/* Language Dropdown */}
           <div className="mb-4 md:mb-6 w-full flex justify-center">
             <div className="relative w-full max-w-[315px] px-4 md:px-0">
+              <div className="flex items-center mb-2">
+                <span className="text-sm text-gray-600 mr-2">🌐</span>
+                <span className="text-sm text-gray-600">Select Language / 言語を選択</span>
+              </div>
               <select
                 className="block w-full h-12 md:h-14 px-4 rounded-lg border border-gray-300 bg-gray-50 text-gray-700 text-sm md:text-base appearance-none focus:outline-none focus:border-purple-300"
                 value={currentLanguage}
-                onChange={(e) => {
-                  const newLanguage = e.target.value;
-                  setCurrentLanguage(newLanguage);
-                  if (roomRef.current && roomRef.current.localParticipant) {
-                    roomRef.current.localParticipant.setAttributes({ language: newLanguage });
-                  }
-                }}
+                onChange={(e) => handleLanguageChange(e.target.value)}
               >
-                <option value="en">English</option>
-                <option value="ja">日本語</option>
+                <option value="en">🇺🇸 English</option>
+                <option value="ja">🇯🇵 日本語</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3">
                 <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" /></svg>
               </div>
+              {joined && (
+                <div className="mt-2 text-center">
+                  <span className="text-xs text-green-600 font-medium">
+                    {currentLanguage === "en" ? "Agent will speak in English" : "エージェントは日本語で話します"}
+                  </span>
+                </div>
+              )}
             </div>
           </div>
           
