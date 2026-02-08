@@ -1,39 +1,124 @@
-# LiveKit Voice Real Estate Agent Frontend
+# 🧭 Dwilar Voice Real Estate Agent – Frontend [Project ID: P-12335]
 
-## Overview
+A modern, responsive Next.js web interface for the AI-powered Dwilar voice real estate agent — enabling real-time voice calls, bilingual property browsing, and seamless lead capture.
 
-This frontend is a Next.js application that provides a modern, responsive web interface for the AI-powered voice real estate agent. It integrates with LiveKit for real-time voice communication and displays property search results with detailed modals and contact forms.
+---
 
-## Features
+## 📚 Table of Contents
 
-- **Real-time Voice Communication**: Seamless audio calls with AI agent
-- **Multi-language Support**: English and Japanese interface with language switching
-- **Property Display**: Interactive property cards with detailed modal views
-- **Contact Collection**: Integrated contact forms for lead capture
-- **Responsive Design**: Modern UI that works on desktop and mobile devices
-- **Real-time Updates**: Live property search results and UI state synchronization
+- [About](#-about)
+- [Features](#-features)
+- [Tech Stack](#-tech-stack)
+- [Installation](#%EF%B8%8F-installation)
+- [Usage](#-usage)
+- [Configuration](#-configuration)
+- [Screenshots](#-screenshots)
+- [API Documentation](#-api-documentation)
+- [Contact](#-contact)
+- [Acknowledgements](#-acknowledgements)
 
-## Technology Stack
+---
 
-- **Framework**: Next.js 15.4.1 with App Router
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS 4.0
-- **Real-time Communication**: LiveKit Client SDK
-- **UI Components**: Custom React components with LiveKit Components
-- **State Management**: React Hooks (useState, useEffect)
+## 🧩 About
 
-## Setup Instructions
+This is the **frontend companion** to the [Dwilar Voice Real Estate Agent backend](https://github.com/yourusername/dwilar-voice-agent-v1). While the backend handles AI conversation, property search, and voice processing, this Next.js application provides the user-facing interface where users can:
+
+- Start a real-time voice call with the AI agent
+- Switch between English and Japanese
+- Browse, select, and inspect property listings pushed by the agent
+- Submit contact information through integrated forms
+
+The two projects communicate in real time via **LiveKit RPC methods**, keeping the UI perfectly synchronized with the voice conversation state.
+
+---
+
+## ✨ Features
+
+- **One-Click Voice Calls** – Connect to the AI agent instantly with microphone audio via LiveKit
+- **Bilingual Interface (EN/JA)** – Language selector that syncs with the backend agent's spoken language
+- **Live Property Cards** – Responsive grid of property cards populated in real time from the agent's search results
+- **Detailed Property Modal** – Full-screen modal with image gallery (navigation arrows), floor plans, virtual tours, and comprehensive property specs
+- **Integrated Contact Forms** – Modal-based email & phone capture triggered by the AI agent, with submission confirmation
+- **Real-time RPC Sync** – Frontend registers LiveKit RPC handlers to receive data and UI commands from the backend agent
+- **Responsive Design** – Mobile-first layout with Tailwind CSS, optimized for all screen sizes
+
+---
+
+## 🧠 Tech Stack
+
+| Category          | Technologies                                                        |
+| ----------------- | ------------------------------------------------------------------- |
+| **Framework**     | Next.js 15.4.1 (App Router)                                        |
+| **Language**      | TypeScript 5                                                        |
+| **UI Library**    | React 19.1.0                                                       |
+| **Styling**       | Tailwind CSS 4.0, PostCSS                                          |
+| **Real-time/RTC** | LiveKit Client SDK, `@livekit/components-react`, `@livekit/components-styles` |
+| **Auth/Tokens**   | `livekit-server-sdk` (server-side token generation)                 |
+| **Fonts**         | Geist Sans & Geist Mono (via `next/font/google`)                   |
+| **Linting**       | ESLint 9 with `eslint-config-next`                                  |
+
+---
+
+## ⚙️ Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/Dwilar-front-full-v1.git
+
+# Navigate to the project directory
+cd Dwilar-front-full-v1
+
+# Install dependencies
+npm install
+# or
+yarn install
+```
 
 ### Prerequisites
 
-- Node.js 18+ 
-- npm or yarn package manager
-- LiveKit Cloud account
-- Backend agent running (see backend README)
+- Node.js 18+
+- npm or yarn
+- A [LiveKit Cloud](https://livekit.io/) account (URL, API key, API secret)
+- The [Dwilar backend agent](https://github.com/yourusername/dwilar-voice-agent-v1) running and connected to the same LiveKit project
+
+---
+
+## 🚀 Usage
+
+```bash
+# Start the development server
+npm run dev
+```
+
+Then open your browser and go to:
+👉 [http://localhost:3000](http://localhost:3000)
+
+### Available Scripts
+
+| Command           | Description                    |
+| ----------------- | ------------------------------ |
+| `npm run dev`     | Start development server       |
+| `npm run build`   | Build for production            |
+| `npm run start`   | Start production server         |
+| `npm run lint`    | Run ESLint checks               |
+
+### User Flow
+
+1. **Select Language** – Choose English or Japanese from the dropdown
+2. **Start Voice Call** – Click "Start Voice Call" to connect to the AI agent
+3. **Speak Your Preferences** – Tell the agent your desired location, price, and bedrooms
+4. **Browse Results** – Property cards appear in real time as the agent finds matches
+5. **View Details** – Click any card to open a full modal with images, floor plans, and specs
+6. **Submit Contact Info** – When interested, the agent triggers a contact form for email & phone
+7. **End Call** – Click "End Call" to disconnect
+
+---
+
+## 🧾 Configuration
 
 ### Environment Variables
 
-Create a `.env.local` file in the frontend directory:
+Create a `.env.local` file in the project root:
 
 ```env
 NEXT_PUBLIC_LIVEKIT_URL=wss://your-livekit-url
@@ -41,309 +126,128 @@ LIVEKIT_API_KEY=your_livekit_api_key
 LIVEKIT_API_SECRET=your_livekit_api_secret
 ```
 
-### Installation
+### Remote Image Domains
 
-1. Install dependencies:
-```bash
-npm install
-# or
-yarn install
-```
+The `next.config.ts` is pre-configured to allow property images from:
+- `img-v2.gtsstatic.net`
+- `m.sothebysrealty.com`
+- `sothebysrealty.com`
 
-2. Run the development server:
-```bash
-npm run dev
-# or
-yarn dev
-```
-
-3. Open [http://localhost:3000](http://localhost:3000) in your browser
-
-## Application Structure
-
-### Core Components
-
-1. **Main Page (`src/app/page.tsx`)**: Primary interface with voice controls
-2. **Property Card (`src/components/PropertyCard.tsx`)**: Individual property display
-3. **Property Modal (`src/components/PropertyModal.tsx`)**: Detailed property view
-4. **Token API (`src/app/api/token/route.ts`)**: LiveKit authentication
-5. **Layout (`src/app/layout.tsx`)**: Application wrapper and metadata
-
-### File Structure
+### Project Structure
 
 ```
-frontend/
+Dwilar-front-full-v1/
+├── public/                        # Static assets
 ├── src/
 │   ├── app/
-│   │   ├── api/token/         # LiveKit token generation
-│   │   ├── globals.css        # Global styles
-│   │   ├── layout.tsx         # Root layout
-│   │   └── page.tsx           # Main application page
+│   │   ├── api/token/
+│   │   │   └── route.ts           # LiveKit token generation endpoint
+│   │   ├── globals.css            # Global styles & Tailwind imports
+│   │   ├── layout.tsx             # Root layout (metadata, fonts)
+│   │   └── page.tsx               # Main page (voice controls, property grid, modals)
 │   └── components/
-│       ├── PropertyCard.tsx   # Property display component
-│       └── PropertyModal.tsx  # Property detail modal
-├── public/                    # Static assets
-├── package.json              # Dependencies and scripts
-├── tsconfig.json             # TypeScript configuration
-├── tailwind.config.js        # Tailwind CSS configuration
-└── next.config.ts            # Next.js configuration
+│       ├── PropertyCard.tsx       # Property summary card component
+│       └── PropertyModal.tsx      # Detailed property modal with image gallery
+├── eslint.config.mjs              # ESLint configuration
+├── next.config.ts                 # Next.js config (image domains, env vars)
+├── package.json                   # Dependencies and scripts
+├── postcss.config.mjs             # PostCSS / Tailwind processing
+└── tsconfig.json                  # TypeScript configuration (strict, path aliases)
 ```
 
-## Key Features
+---
 
-### Voice Communication
+## 🖼 Screenshots
 
-The application uses LiveKit for real-time voice communication:
+> _Screenshots and demo GIFs of the frontend in action will be added here._
 
-```typescript
-// Room connection with audio tracks
-const room = new Room({ adaptiveStream: true, dynacast: true });
-await room.connect(livekit_url, token);
+<!-- Example:
+![Welcome Screen](docs/welcome.png)
+![Property Results](docs/property-results.png)
+![Property Modal](docs/property-modal.png)
+![Contact Form](docs/contact-form.png)
+-->
 
-// Publish microphone audio
-const tracks = await createLocalTracks({ audio: true, video: false });
-await room.localParticipant.publishTrack(tracks[0]);
+---
+
+## 📜 API Documentation
+
+### Token Endpoint
+
+| Endpoint             | Method | Description                              |
+| -------------------- | ------ | ---------------------------------------- |
+| `/api/token`         | `GET`  | Generates a LiveKit access token         |
+
+**Query Parameters:**
+
+| Parameter  | Required | Description                     |
+| ---------- | -------- | ------------------------------- |
+| `room`     | Yes      | LiveKit room name to join       |
+| `username` | Yes      | Identity for the participant    |
+
+**Response:**
+```json
+{ "token": "<JWT>" }
 ```
 
-### Language Support
+**Granted Permissions:** `roomJoin`, `canPublish`, `canSubscribe`, `canUpdateOwnMetadata`
 
-Users can switch between English and Japanese:
+### LiveKit RPC Methods (Client-side)
 
-```typescript
-const handleLanguageChange = async (newLanguage: string) => {
-  setCurrentLanguage(newLanguage);
-  if (room.localParticipant) {
-    await room.localParticipant.setAttributes({ language: newLanguage });
-  }
-};
-```
+The frontend registers these RPC handlers that the backend agent invokes:
 
-### Property Display
+| RPC Method            | Direction        | Description                                          |
+| --------------------- | ---------------- | ---------------------------------------------------- |
+| `initData`            | Agent → Client   | Receives property search results and renders cards    |
+| `showContactForm`     | Agent → Client   | Opens the contact form modal with a message           |
+| `submitContactInfo`   | Agent → Client   | Confirms submission and hides the contact form        |
+| `contactFormSubmitted` | Agent → Client  | Acknowledges frontend-initiated form submission       |
+| `getContactInfo`      | Agent → Client   | Retrieves contact info stored in frontend state       |
 
-Properties are displayed using responsive cards:
+### Property Interface
 
 ```typescript
 interface Property {
   title: string;
   imgs: Array<string>;
+  videos: string;
+  floor_plan: Array<string>;
+  virtual_tutor: Array<string>;
+  property_id: string;
   price: string;
+  property_type: string;
+  marketed_by: string;
+  status: string;
+  county: string;
+  total_sqft: string;
+  lot_size_unit: string;
+  lot_size: string;
+  full_bathrooms: string;
   bedrooms: string;
   address: string;
-  // ... additional property fields
+  structure: string;
+  year_built: string;
+  living_area: string;
+  // ... additional detail fields
 }
 ```
 
-### Real-time Data Updates
+---
 
-The frontend receives property data via LiveKit RPC:
+## 📬 Contact
 
-```typescript
-// Register RPC method to receive property data
-room.localParticipant.registerRpcMethod("initData", (rpcInvocation) => {
-  const properties = JSON.parse(rpcInvocation.payload);
-  setResult(properties);
-});
-```
+- **Author:** Dwilar Company
+- **GitHub:** [Vector99dev](https://github.com/yourgithub)
+- **Email:** challengemode45@gmail.com
+- **Website:** [Not deployed](https://dwilar.com)
 
-## User Interface
+---
 
-### Main Interface
+## 🌟 Acknowledgements
 
-- **Language Selector**: Dropdown for English/Japanese selection
-- **Connection Status**: Visual indicator for voice call status
-- **Voice Controls**: Start/End call buttons
-- **Property Grid**: Responsive grid of property cards
-
-### Property Cards
-
-Each property card displays:
-- Property image
-- Title and price
-- Bedroom/bathroom count
-- Address and status
-- Click-to-expand functionality
-
-### Property Modal
-
-The detailed modal includes:
-- Image gallery with navigation
-- Comprehensive property details
-- Floor plans and virtual tours
-- Property specifications and restrictions
-
-### Contact Forms
-
-Integrated forms for lead capture:
-- Email and phone collection
-- Form validation
-- Success confirmation
-- Agent integration via RPC
-
-## API Integration
-
-### Token Generation
-
-The `/api/token` endpoint generates LiveKit access tokens:
-
-```typescript
-export async function GET(req: NextRequest) {
-  const room = req.nextUrl.searchParams.get('room');
-  const username = req.nextUrl.searchParams.get('username');
-  
-  const at = new AccessToken(apiKey, apiSecret, { identity: username });
-  at.addGrant({ room, roomJoin: true, canPublish: true, canSubscribe: true });
-  
-  return NextResponse.json({ token: await at.toJwt() });
-}
-```
-
-### RPC Methods
-
-The frontend registers several RPC methods for backend communication:
-
-- `initData`: Receive property search results
-- `showContactForm`: Display contact collection UI
-- `submitContactInfo`: Process contact form data
-- `getContactInfo`: Provide stored contact information
-
-## Styling and Responsive Design
-
-### Tailwind CSS
-
-The application uses Tailwind CSS for styling:
-
-```css
-/* Responsive design example */
-<div className="min-h-screen flex flex-col items-center justify-center bg-white">
-  <h1 className="text-3xl md:text-6xl font-bold text-gray-800 mb-3 md:mb-4">
-    Welcome to Dwilar
-  </h1>
-</div>
-```
-
-### Brand Design
-
-- **Color Scheme**: Purple gradient branding with gray accents
-- **Typography**: Geist font family for modern appearance
-- **Icons**: Custom SVG icons and Unicode symbols
-- **Layout**: Centered, card-based design with proper spacing
-
-## State Management
-
-### React Hooks
-
-The application uses React hooks for state management:
-
-```typescript
-const [joined, setJoined] = useState(false);
-const [currentLanguage, setCurrentLanguage] = useState("en");
-const [result, setResult] = useState<Property[]>([]);
-const [selectedProperty, setSelectedProperty] = useState<Property | null>(null);
-const [showContactForm, setShowContactForm] = useState(false);
-```
-
-### Real-time Synchronization
-
-State updates are synchronized with the backend agent through LiveKit RPC calls, ensuring the UI reflects the current conversation state.
-
-## Development
-
-### Available Scripts
-
-- `npm run dev`: Start development server
-- `npm run build`: Build for production
-- `npm run start`: Start production server
-- `npm run lint`: Run ESLint
-
-### Configuration Files
-
-- **TypeScript**: Configured with strict mode and path mapping
-- **ESLint**: Next.js recommended configuration with TypeScript support
-- **Tailwind**: Optimized for production with custom configuration
-- **PostCSS**: Integrated with Tailwind processing
-
-## Deployment
-
-### Build Process
-
-```bash
-npm run build
-npm run start
-```
-
-### Environment Setup
-
-Ensure all environment variables are properly configured:
-- LiveKit connection URL
-- API keys for authentication
-- Any additional service credentials
-
-### Performance Optimization
-
-- **Code Splitting**: Automatic via Next.js App Router
-- **Image Optimization**: Next.js Image component for property photos
-- **Bundle Analysis**: Use `@next/bundle-analyzer` for optimization
-- **Caching**: Appropriate cache headers for static assets
-
-## Troubleshooting
-
-### Common Issues
-
-1. **LiveKit Connection Failed**: 
-   - Check environment variables
-   - Verify LiveKit URL format
-   - Ensure backend agent is running
-
-2. **Audio Not Working**:
-   - Check browser permissions for microphone
-   - Verify audio device availability
-   - Test with different browsers
-
-3. **Property Data Not Loading**:
-   - Confirm backend agent is running
-   - Check RPC method registration
-   - Verify property data format
-
-4. **Styling Issues**:
-   - Clear browser cache
-   - Check Tailwind CSS compilation
-   - Verify responsive breakpoints
-
-### Debug Mode
-
-Enable debug logging in development:
-
-```typescript
-// Add to page.tsx for debugging
-console.log('Room state:', room.state);
-console.log('Participants:', room.participants);
-console.log('RPC methods:', room.localParticipant.rpcMethods);
-```
-
-## Browser Compatibility
-
-- **Chrome**: Full support (recommended)
-- **Firefox**: Full support
-- **Safari**: Full support with WebRTC limitations
-- **Edge**: Full support
-- **Mobile browsers**: Responsive design optimized
-
-## Contributing
-
-### Code Style
-
-- Use TypeScript for type safety
-- Follow ESLint configuration
-- Use Tailwind for styling
-- Component-based architecture
-
-### Adding Features
-
-1. Create new components in `src/components/`
-2. Update TypeScript interfaces as needed
-3. Add RPC methods for backend communication
-4. Test responsive design on multiple devices
-
-## License
-
-This project is part of the Dwilar Company real estate platform.
+- [Next.js](https://nextjs.org/) — React framework for production
+- [LiveKit](https://livekit.io/) — Real-time communication infrastructure & React components
+- [Tailwind CSS](https://tailwindcss.com/) — Utility-first CSS framework
+- [Vercel](https://vercel.com/) — Hosting and deployment platform for Next.js
+- [Geist Font](https://vercel.com/font) — Modern typeface by Vercel
+- [Dwilar Voice Agent Backend](https://github.com/yourusername/dwilar-voice-agent-v1) — AI backend powering the voice agent
